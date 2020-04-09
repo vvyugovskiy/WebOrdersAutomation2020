@@ -17,11 +17,10 @@ import java.io.IOException;
 
 public abstract class AbstractBaseTest {
 
-    protected WebDriver driver = Driver.getDriver();
-
-    protected ExtentReports extentReports;
-    protected ExtentHtmlReporter extentHtmlReporter;
-    protected ExtentTest extentTest;
+    protected WebDriver driver;
+    protected static ExtentReports extentReports;
+    protected static ExtentHtmlReporter extentHtmlReporter;
+    protected static ExtentTest extentTest;
 
     @BeforeTest
     public void beforeTest() {
@@ -46,6 +45,7 @@ public abstract class AbstractBaseTest {
 
     @BeforeMethod
     public void setup() {
+        driver = Driver.getDriver();
         driver.get(ConfigurationReader.getProperty("url"));
         driver.manage().window().maximize();
 
@@ -68,6 +68,8 @@ public abstract class AbstractBaseTest {
         } else if (testResult.getStatus() == ITestResult.SKIP) {  // in case of SKIP
             extentTest.skip(testResult.getName());
         }
+
+        BrowserUtilities.wait(2);
         Driver.closeDriver();
     }
 }
